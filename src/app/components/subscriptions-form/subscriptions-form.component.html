@@ -1,0 +1,104 @@
+<mat-toolbar>
+  <span>New Subscription</span>
+</mat-toolbar>
+<div class="wrapper">
+  <ng-container *ngIf="mode !== 'SUCCESS'">
+    <p>
+      Fill the form with your data and select the newsletter that you want to
+      receive. Then, press "Subscribe" button.
+    </p>
+    <form [formGroup]="subscriptionForm" (ngSubmit)="createSubscription()">
+      <!-- Email -->
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" formControlName="email" />
+      </mat-form-field>
+
+      <!-- First name -->
+      <mat-form-field>
+        <mat-label>First Name</mat-label>
+        <input matInput placeholder="First Name" formControlName="firstName" />
+      </mat-form-field>
+
+      <!-- Gender -->
+      <mat-form-field>
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option></mat-option>
+          <mat-option value="FEMALE">Female</mat-option>
+          <mat-option value="MALE">Male</mat-option>
+          <mat-option value="OTHER">Other</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Birth date -->
+      <mat-form-field>
+        <mat-label>Birth date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="birthDate" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <!-- Newsletter ID -->
+      <mat-form-field>
+        <mat-label>Newsletter</mat-label>
+        <mat-select formControlName="newsletterId">
+          <mat-option
+            *ngFor="let newsletter of newsletters"
+            [value]="newsletter.id"
+          >
+            {{ newsletter.description }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Consent -->
+      <div class="consent-form-field">
+        <mat-checkbox formControlName="consent">
+          I agree to receive emails
+        </mat-checkbox>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button
+          type="button"
+          mat-raised-button
+          color="warn"
+          [disabled]="mode === 'LOADING'"
+          (click)="subscriptionForm.reset()"
+        >
+          Clear
+        </button>
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="
+            subscriptionForm.invalid ||
+            !subscriptionForm.value.consent ||
+            mode === 'LOADING'
+          "
+        >
+          <mat-spinner
+            *ngIf="mode === 'LOADING'"
+            class="loading-spinner"
+            [diameter]="20"
+          ></mat-spinner>
+          <ng-container *ngIf="mode !== 'LOADING'">Subscribe</ng-container>
+        </button>
+      </div>
+    </form>
+  </ng-container>
+  <ng-container *ngIf="mode === 'SUCCESS'">
+    <p>
+      Subcription to "{{ subscriptionForm.value.newsletterId }}" created
+      successfully. A confirmation email has been sent.
+    </p>
+    <div class="success-actions">
+      <button mat-raised-button color="primary" (click)="returnToForm()">
+        New subscription...
+      </button>
+    </div>
+  </ng-container>
+</div>
