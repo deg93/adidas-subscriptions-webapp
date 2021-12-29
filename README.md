@@ -13,4 +13,4 @@ npm install
 ng serve
 ```
 
-To run the previous commands, it is necessary to have Node.js (+16) and Angular CLI (+13) installed.
+Once executed, in your browser, open [http://localhost:4200/](http://localhost:4200/). To run the previous commands, it is necessary to have Node.js (+16) and Angular CLI (+13) installed.
